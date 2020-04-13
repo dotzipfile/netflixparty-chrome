@@ -214,7 +214,7 @@
     // play
     var play = function() {
       uiEventsHappening += 1;
-      jQuery('.player-play-pause.play').click();
+      jQuery('.play-icon').click();
       return delayUntil(function() {
         return getState() === 'playing';
       }, 2500)().then(hideControls).ensure(function() {
