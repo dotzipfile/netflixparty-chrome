@@ -242,52 +242,54 @@
       return function() {
         uiEventsHappening += 1;
         var eventOptions, scrubber, oldPlaybackPosition, newPlaybackPosition;
-        return showControls().then(function() {
-          // compute the parameters for the mouse events
-          scrubber = jQuery('#scrubber-component');
-          var factor = (milliseconds - seekErrorMean) / getDuration();
-          factor = Math.min(Math.max(factor, 0), 1);
-          var mouseX = scrubber.offset().left + Math.round(scrubber.width() * factor); // relative to the document
-          var mouseY = scrubber.offset().top + scrubber.height() / 2;                  // relative to the document
-          eventOptions = {
-            'bubbles': true,
-            'button': 0,
-            'screenX': mouseX - jQuery(window).scrollLeft(),
-            'screenY': mouseY - jQuery(window).scrollTop(),
-            'clientX': mouseX - jQuery(window).scrollLeft(),
-            'clientY': mouseY - jQuery(window).scrollTop(),
-            'offsetX': mouseX - scrubber.offset().left,
-            'offsetY': mouseY - scrubber.offset().top,
-            'pageX': mouseX,
-            'pageY': mouseY,
-            'currentTarget': scrubber[0]
-          };
+        newPlaybackPosition = getPlaybackPosition();
+        return Math.abs(newPlaybackPosition - oldPlaybackPosition) >= 1;
+        // return showControls().then(function() {
+        //   // compute the parameters for the mouse events
+        //   scrubber = jQuery('#scrubber-component');
+        //   var factor = (milliseconds - seekErrorMean) / getDuration();
+        //   factor = Math.min(Math.max(factor, 0), 1);
+        //   var mouseX = scrubber.offset().left + Math.round(scrubber.width() * factor); // relative to the document
+        //   var mouseY = scrubber.offset().top + scrubber.height() / 2;                  // relative to the document
+        //   eventOptions = {
+        //     'bubbles': true,
+        //     'button': 0,
+        //     'screenX': mouseX - jQuery(window).scrollLeft(),
+        //     'screenY': mouseY - jQuery(window).scrollTop(),
+        //     'clientX': mouseX - jQuery(window).scrollLeft(),
+        //     'clientY': mouseY - jQuery(window).scrollTop(),
+        //     'offsetX': mouseX - scrubber.offset().left,
+        //     'offsetY': mouseY - scrubber.offset().top,
+        //     'pageX': mouseX,
+        //     'pageY': mouseY,
+        //     'currentTarget': scrubber[0]
+        //   };
 
-          // make the trickplay preview show up
-          scrubber[0].dispatchEvent(new MouseEvent('mouseover', eventOptions));
-        }).then(delayUntil(function() {
-          // wait for the trickplay preview to show up
-          return jQuery('.trickplay-preview').is(':visible');
-        }, 2500)).then(function() {
-          // remember the old position
-          oldPlaybackPosition = getPlaybackPosition();
+        //   // make the trickplay preview show up
+        //   scrubber[0].dispatchEvent(new MouseEvent('mouseover', eventOptions));
+        // }).then(delayUntil(function() {
+        //   // wait for the trickplay preview to show up
+        //   return jQuery('.trickplay-preview').is(':visible');
+        // }, 2500)).then(function() {
+        //   // remember the old position
+        //   oldPlaybackPosition = getPlaybackPosition();
 
-          // simulate a click on the scrubber
-          scrubber[0].dispatchEvent(new MouseEvent('mousedown', eventOptions));
-          scrubber[0].dispatchEvent(new MouseEvent('mouseup', eventOptions));
-          scrubber[0].dispatchEvent(new MouseEvent('mouseout', eventOptions));
-        }).then(delayUntil(function() {
-          // wait until the seeking is done
-          newPlaybackPosition = getPlaybackPosition();
-          return Math.abs(newPlaybackPosition - oldPlaybackPosition) >= 1;
-        }, 5000)).then(function() {
-          // compute mean seek error for next time
-          var newSeekError = Math.min(Math.max(newPlaybackPosition - milliseconds, -10000), 10000);
-          shove(seekErrorRecent, newSeekError, 5);
-          seekErrorMean = mean(seekErrorRecent);
-        }).then(hideControls).ensure(function() {
-          uiEventsHappening -= 1;
-        });
+        //   // simulate a click on the scrubber
+        //   scrubber[0].dispatchEvent(new MouseEvent('mousedown', eventOptions));
+        //   scrubber[0].dispatchEvent(new MouseEvent('mouseup', eventOptions));
+        //   scrubber[0].dispatchEvent(new MouseEvent('mouseout', eventOptions));
+        // }).then(delayUntil(function() {
+        //   // wait until the seeking is done
+        //   newPlaybackPosition = getPlaybackPosition();
+        //   return Math.abs(newPlaybackPosition - oldPlaybackPosition) >= 1;
+        // }, 5000)).then(function() {
+        //   // compute mean seek error for next time
+        //   var newSeekError = Math.min(Math.max(newPlaybackPosition - milliseconds, -10000), 10000);
+        //   shove(seekErrorRecent, newSeekError, 5);
+        //   seekErrorMean = mean(seekErrorRecent);
+        // }).then(hideControls).ensure(function() {
+        //   uiEventsHappening -= 1;
+        // });
       };
     };
 
