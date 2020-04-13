@@ -129,13 +129,13 @@
 
     // 'playing', 'paused', 'loading', or 'idle'
     var getState = function() {
-      if (jQuery('.timeout-wrapper.player-active .icon-play').length > 0) {
+      if (jQuery('.play-icon').length > 0) {
         return 'idle';
       }
       if (jQuery('.player-progress-round.player-hidden').length === 0) {
         return 'loading';
       }
-      if (jQuery('.player-control-button.player-play-pause.play').length === 0) {
+      if (jQuery('.pause-icon').length === 0) {
         return 'playing';
       } else {
         return 'paused';
