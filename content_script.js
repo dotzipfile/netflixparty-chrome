@@ -476,7 +476,7 @@
     // set up the chat state, or reset the state if the system has already been set up
     var initChat = function() {
       if (jQuery('#chat-container').length === 0) {
-        jQuery('#netflix-player').after(chatHtml);
+        jQuery('#app_body_content').after(chatHtml);
         jQuery('#presence-indicator').hide();
         var oldPageX = null;
         var oldPageY = null;

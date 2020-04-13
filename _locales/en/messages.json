@@ -1,10 +1,10 @@
 {
   "extName": {
-    "message": "Netflix Party",
+    "message": "Video Party for Disney",
     "description": "Extension name"
   },
   "extDescription": {
-    "message": "Watch Netflix remotely with friends",
+    "message": "Watch movies on Disney Plus remotely with friends",
     "description": "Extension description"
   }
 }
