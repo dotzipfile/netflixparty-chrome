@@ -144,7 +144,7 @@
 
     // current playback position in milliseconds
     var getPlaybackPosition = function() {
-      return Math.floor(jQuery('.player-video-wrapper video')[0].currentTime * 1000);
+      return Math.floor(jQuery('video')[0].currentTime * 1000);
     };
 
     // wake up from idle mode
@@ -203,7 +203,7 @@
     // pause
     var pause = function() {
       uiEventsHappening += 1;
-      jQuery('.player-play-pause.pause').click();
+      jQuery('.pause-icon').click();
       return delayUntil(function() {
         return getState() === 'paused';
       }, 1000)().then(hideControls).ensure(function() {
