@@ -54,6 +54,7 @@
     // returns an action which waits until the condition thunk returns true,
     // rejecting if maxDelay time is exceeded
     var delayUntil = function(condition, maxDelay) {
+      console.log(condition);
       return function(result) {
         var delayStep = 250;
         var startTime = (new Date()).getTime();
@@ -129,12 +130,6 @@
 
     // 'playing', 'paused', 'loading', or 'idle'
     var getState = function() {
-      if (jQuery('.play-icon').length > 0) {
-        return 'idle';
-      }
-      if (jQuery('.player-progress-round.player-hidden').length === 0) {
-        return 'loading';
-      }
       if (jQuery('.pause-icon').length === 0) {
         return 'playing';
       } else {
@@ -666,15 +661,7 @@
           var localTime = getPlaybackPosition();
           var serverTime = lastKnownTime + (state === 'playing' ? ((new Date()).getTime() - (lastKnownTimeUpdatedAt.getTime() + localTimeMinusServerTimeMedian)) : 0);
           if (Math.abs(localTime - serverTime) > maxTimeError) {
-            return seek(serverTime + 2000)().then(function() {
-              var localTime = getPlaybackPosition();
-              var serverTime = lastKnownTime + (state === 'playing' ? ((new Date()).getTime() - (lastKnownTimeUpdatedAt.getTime() + localTimeMinusServerTimeMedian)) : 0);
-              if (localTime > serverTime && localTime <= serverTime + maxTimeError) {
-                return freeze(localTime - serverTime)();
-              } else {
-                return play();
-              }
-            });
+            return seek(serverTime + 2000)();
           } else {
             return play();
           }
@@ -705,6 +692,7 @@
         }, Infinity)).then(function() {
           var now = new Date();
           var localTime = getPlaybackPosition();
+          console.log(localTime);
           var serverTime = lastKnownTime + (state === 'playing' ? (now.getTime() - (lastKnownTimeUpdatedAt.getTime() + localTimeMinusServerTimeMedian)) : 0);
           var newLastKnownTime = localTime;
           var newLastKnownTimeUpdatedAt = new Date(now.getTime() - localTimeMinusServerTimeMedian);
